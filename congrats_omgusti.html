@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Selamat Wisuda!</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        font-family: "Poppins", sans-serif;
+        overflow: hidden;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: #333;
+      }
+
+      h1 {
+        font-size: 3em;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        animation: bounce 1.5s infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      h2 {
+        font-size: 1.5em;
+        color: #555;
+        margin-bottom: 30px;
+      }
+
+      button {
+        background: #ff7675;
+        border: none;
+        color: white;
+        padding: 15px 25px;
+        font-size: 1em;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      button:hover {
+        background: #d63031;
+        transform: scale(1.1);
+      }
+
+      .message {
+        margin-top: 25px;
+        font-size: 1.3em;
+        color: #2c2c2c;
+        opacity: 0;
+        transition: opacity 1s ease;
+        max-width: 80%;
+      }
+
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="confetti"></canvas>
+    <h1>🎓 Selamat Wisuda! Om Gusti🎉</h1>
+    <h2>Setelah sekian lama berjuang melawan skripsi...</h2>
+    <button id="showMessage">Klik untuk pesan rahasia 😆</button>
+    <div class="message" id="message">Wah akhirnya wisuda juga! Sekarang resmi jadi *sarjana pengangguran berkelas!* 😜 Tapi serius, selamat ya! Semoga ilmunya bermanfaat dan rezekinya lancar selalu 🙏</div>
+
+    <script>
+      // Tombol interaktif
+      const btn = document.getElementById("showMessage");
+      const msg = document.getElementById("message");
+      let shown = false;
+
+      btn.addEventListener("click", () => {
+        shown = !shown;
+        msg.style.opacity = shown ? 1 : 0;
+        btn.innerText = shown ? "Sembunyikan Pesan 😅" : "Klik untuk pesan rahasia 😆";
+      });
+
+      // Efek confetti 🎉
+      const canvas = document.getElementById("confetti");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const confettis = Array.from({ length: 150 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 6 + 2,
+        dx: Math.random() - 0.5,
+        dy: Math.random() * 3 + 2,
+        color: `hsl(${Math.random() * 360}, 100%, 70%)`,
+      }));
+
+      function drawConfetti() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confettis.forEach((c) => {
+          ctx.beginPath();
+          ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+          ctx.fillStyle = c.color;
+          ctx.fill();
+        });
+      }
+
+      function updateConfetti() {
+        confettis.forEach((c) => {
+          c.x += c.dx;
+          c.y += c.dy;
+          if (c.y > canvas.height) c.y = 0;
+        });
+      }
+
+      function loop() {
+        drawConfetti();
+        updateConfetti();
+        requestAnimationFrame(loop);
+      }
+      loop();
+
+      window.addEventListener("resize", () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
+    </script>
+  </body>
+</html>
